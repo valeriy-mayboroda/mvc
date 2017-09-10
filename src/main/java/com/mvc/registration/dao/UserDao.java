@@ -1,15 +1,24 @@
 package com.mvc.registration.dao;
 
 import com.mvc.registration.model.User;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Arrays;
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserDao {
-    private List<User> users = Arrays.asList(new User("admin", "admin"),
-            new User("user1", "user1"));
+    @Autowired
+    SessionFactory sessionFactory;
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     public List<User> getAllUsers () {
-        return users;
+        return this.sessionFactory.getCurrentSession().createQuery("from User").list();
     }
 }
